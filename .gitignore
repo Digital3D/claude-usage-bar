@@ -1,0 +1,5 @@
+# Types the engine writes when it loads the mod
+usage-bar/.claude-plugin/types/
+node_modules/
+# Local notes, not published
+.claude/

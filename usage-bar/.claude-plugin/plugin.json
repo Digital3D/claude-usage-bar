@@ -1,0 +1,119 @@
+{
+  "name": "usage-bar",
+  "version": "1.0.0",
+  "description": "Band above the prompt, on two lines, one or hidden: Claude quotas (session, week, Fable) with resets, projection and alerts, context, session cost, git state, weekly pace, running subagents, and buttons to /model, /context, /usage and /cost",
+  "author": { "name": "Digital3D" },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "resetStyle": {
+      "type": "string",
+      "title": "Reset style",
+      "description": "How a window's reset is shown: the delay left (delay) or the time of day (time).",
+      "options": ["delay", "time"],
+      "default": "delay"
+    },
+    "warnPercent": {
+      "type": "number",
+      "title": "Warning threshold",
+      "description": "Percentage from which a gauge takes the warning color.",
+      "default": 50
+    },
+    "dangerPercent": {
+      "type": "number",
+      "title": "Danger threshold",
+      "description": "Percentage from which a gauge takes the danger color.",
+      "default": 90
+    },
+    "quotaAlerts": {
+      "type": "string",
+      "title": "Quota alerts",
+      "description": "Comma-separated percentages at which a quota raises an alert. Empty: no alert.",
+      "default": "50,80,90"
+    },
+    "contextAlerts": {
+      "type": "string",
+      "title": "Context alerts",
+      "description": "Comma-separated percentages at which the context window raises an alert. Empty: no alert.",
+      "default": "80"
+    },
+    "projectionAlertMinutes": {
+      "type": "number",
+      "title": "Projection alert",
+      "description": "Minutes before the session quota is projected full from which an alert is raised (0 to 600). 0: no alert.",
+      "default": 30
+    },
+    "colorOk": {
+      "type": "string",
+      "title": "Color: ok",
+      "description": "Color of a gauge under the warning threshold (a name or #rrggbb).",
+      "default": "green"
+    },
+    "colorWarn": {
+      "type": "string",
+      "title": "Color: warning",
+      "description": "Color of a gauge from the warning threshold (a name or #rrggbb).",
+      "default": "#ff8c00"
+    },
+    "colorDanger": {
+      "type": "string",
+      "title": "Color: danger",
+      "description": "Color of a gauge from the danger threshold (a name or #rrggbb).",
+      "default": "red"
+    },
+    "background": {
+      "type": "string",
+      "title": "Background",
+      "description": "Background color of the band (a name or #rrggbb).",
+      "default": "#0d0f14"
+    },
+    "layout": {
+      "type": "string",
+      "title": "Layout",
+      "description": "How the band is drawn: two lines (full), a single line (compact), or not at all (hidden).",
+      "options": ["full", "compact", "hidden"],
+      "default": "full"
+    },
+    "showFable": {
+      "type": "boolean",
+      "title": "Show Fable",
+      "description": "Show the Fable window's gauge.",
+      "default": true
+    },
+    "showContext": {
+      "type": "boolean",
+      "title": "Show context",
+      "description": "Show the context window's gauge.",
+      "default": true
+    },
+    "showGit": {
+      "type": "boolean",
+      "title": "Show working tree",
+      "description": "Show the uncommitted files and lines.",
+      "default": true
+    },
+    "showCost": {
+      "type": "boolean",
+      "title": "Show cost",
+      "description": "Show what the session cost.",
+      "default": true
+    },
+    "showActivity": {
+      "type": "boolean",
+      "title": "Show activity",
+      "description": "Show the running subagents.",
+      "default": true
+    },
+    "showProjection": {
+      "type": "boolean",
+      "title": "Show projection",
+      "description": "Show when the session quota is projected to run out.",
+      "default": true
+    },
+    "showPace": {
+      "type": "boolean",
+      "title": "Show weekly pace",
+      "description": "Show how far the week's usage runs ahead of or behind an even pace.",
+      "default": true
+    }
+  }
+}

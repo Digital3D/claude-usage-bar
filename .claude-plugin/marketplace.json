@@ -1,0 +1,11 @@
+{
+  "name": "digital3d-usage-bar",
+  "owner": { "name": "Digital3D" },
+  "plugins": [
+    {
+      "name": "usage-bar",
+      "source": "./usage-bar",
+      "description": "Band above the prompt: Claude quotas with resets, projection and alerts, context, session cost, git state, weekly pace and running agents"
+    }
+  ]
+}
