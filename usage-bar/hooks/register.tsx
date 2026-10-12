@@ -61,6 +61,8 @@ type Config = {
   contextAlerts: number[]
   /** Minutes before a full session quota from which an alert is raised; 0: none. */
   projectionAlertMinutes: number
+  /** Session percentage from which the band shows the projection; 0: always. */
+  projectionMinPercent: number
   colorOk: string
   colorWarn: string
   colorDanger: string
@@ -83,6 +85,7 @@ const DEFAULTS: Config = {
   quotaAlerts: [50, 80, 90],
   contextAlerts: [80],
   projectionAlertMinutes: 30,
+  projectionMinPercent: 50,
   colorOk: 'green',
   colorWarn: '#ff8c00',
   colorDanger: 'red',
@@ -148,6 +151,7 @@ const readOptions = (options: PluginOptions | undefined): Config => {
     quotaAlerts: thresholds('quotaAlerts', DEFAULTS.quotaAlerts).sort((x, y) => x - y),
     contextAlerts: thresholds('contextAlerts', DEFAULTS.contextAlerts).sort((x, y) => x - y),
     projectionAlertMinutes: minutes('projectionAlertMinutes', DEFAULTS.projectionAlertMinutes),
+    projectionMinPercent: percent('projectionMinPercent', DEFAULTS.projectionMinPercent),
     colorOk: text('colorOk', DEFAULTS.colorOk),
     colorWarn: text('colorWarn', DEFAULTS.colorWarn),
     colorDanger: text('colorDanger', DEFAULTS.colorDanger),
@@ -1125,6 +1129,7 @@ const SETTING_GROUPS: readonly { title: string; fields: readonly Field[] }[] = [
       { name: 'quotaAlerts', label: 'Quota alerts', kind: 'thresholds' },
       { name: 'contextAlerts', label: 'Context alerts', kind: 'thresholds' },
       { name: 'projectionAlertMinutes', label: 'Projection alert (minutes)', kind: 'minutes' },
+      { name: 'projectionMinPercent', label: 'Projection shown from', kind: 'percent' },
     ],
   },
   {
@@ -1871,7 +1876,9 @@ export const register: Register = (on, options) => {
           ? [{ text: ` ${w.paceText}`, color: (w.pace ?? 0) > 0 ? config.colorWarn : config.colorOk, dropAt: 2 }]
           : []),
         ...(reset !== undefined && !isRepeated ? [{ text: ` ↻ ${reset}`, dropAt: 1 }] : []),
-        ...(config.showProjection && w?.exhaustText !== undefined
+        // Under the set percentage a projection warns for nothing: the band
+        // keeps it for a quota already well used. The alert does not wait.
+        ...(config.showProjection && w?.exhaustText !== undefined && w.percentUsed >= config.projectionMinPercent
           ? [{ text: ` ${w.exhaustText}`, color: config.colorWarn, dropAt: 3 }]
           : []),
       ]

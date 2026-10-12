@@ -80,6 +80,7 @@ Set them from `/usage-bar config`. They are hidden from the `/config` list, but 
 | `quotaAlerts` | `50,80,90` | Quota percentages that raise an alert; empty for none |
 | `contextAlerts` | `80` | Context percentages that raise an alert; empty for none |
 | `projectionAlertMinutes` | `30` | Alert when the session quota is projected full within that many minutes; `0` for none |
+| `projectionMinPercent` | `50` | Session percentage from which the band shows the "full in" projection; `0` for always. The alert above does not depend on it |
 | `colorOk`, `colorWarn`, `colorDanger` | `green`, `#ff8c00`, `red` | Gauge colors, a name or `#rrggbb` |
 | `background` | `#0d0f14` | Background of the band |
 | `showFable`, `showContext`, `showGit`, `showCost`, `showActivity`, `showProjection`, `showPace` | `true` | Show or drop a segment |

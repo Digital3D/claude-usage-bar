@@ -1101,7 +1101,24 @@ test('projects nothing on a flat or too short history', async ($, on) => {
   expect(projections(await texts()).length).toBe(1)
 })
 
-test('starts the history over after a reset', async ($, on) => {
+test('keeps the projection off the band under projectionMinPercent', async ($, on) => {
+  mock.store(on)
+  const quota: Quota = { percent: 20, resetsAt: '1970-01-01T05:00:00Z' }
+  const { refresh, texts } = WATCH($, on, quota)
+
+  // Full in 35 minutes, long before the reset, but at 30% of the window.
+  await refresh()
+  quota.percent = 30
+  await refresh(5 * MINUTE)
+  expect(projections(await texts())).toEqual([])
+
+  // At the 50% of the setting the same pace is said.
+  quota.percent = 50
+  await refresh(5 * MINUTE)
+  expect(projections(await texts())).toEqual([' full in 17m'])
+})
+
+test('starts the history over after a reset', { options: { projectionMinPercent: 0 } }, async ($, on) => {
   mock.store(on)
   const quota: Quota = { percent: 20, resetsAt: '1970-01-01T05:00:00Z' }
   const { refresh, texts } = WATCH($, on, quota)
@@ -1542,10 +1559,10 @@ test('hides the projection when showProjection is off',{ options: { showProjecti
   const { refresh, texts } = WATCH($, on, quota)
 
   await refresh()
-  quota.percent = 30
+  quota.percent = 60
   await refresh(5 * MINUTE)
   const shown = await texts()
-  expect(shown).toContain('30%')
+  expect(shown).toContain('60%')
   expect(projections(shown)).toEqual([])
 })
 
@@ -1838,8 +1855,8 @@ test('opens the settings pane on /usage-bar config', async ($, on) => {
       'Alerts',
       'Segments',
     ])
-    // The eighteen fields, with the values the module was loaded with.
-    expect(await ui.findAll({ type: 'Input' })).toHaveLength(9)
+    // The nineteen fields, with the values the module was loaded with.
+    expect(await ui.findAll({ type: 'Input' })).toHaveLength(10)
     expect(await ui.findAll({ type: 'Select' })).toHaveLength(9)
     expect((await ui.find({ type: 'Select', key: 'layout' }))?.props.label).toBe('Layout')
     expect((await ui.find({ type: 'Input', key: 'warnPercent' }))?.props.value).toBe('50')
